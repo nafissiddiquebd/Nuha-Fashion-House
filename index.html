@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nuha Fashion House — Luxury Modest Wear</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --gradient-start:#125fac;
+      --gradient-end:#a24bdc;
+      --muted:#8b93a7;
+      --card-bg:rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --accent: #fff;
+      --shadow: 0 6px 20px rgba(2,6,23,0.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;font-weight:300;color:var(--accent);background:linear-gradient(135deg,var(--gradient-start),var(--gradient-end));-webkit-font-smoothing:antialiased}
+
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo-wrap{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;padding:6px;box-shadow:var(--shadow)}
+    .logo-wrap img{max-width:100%;max-height:100%;object-fit:contain}
+    .brand h1{font-family:'Playfair Display', serif;font-size:20px;margin:0}
+    .brand p{margin:0;font-size:13px;color:var(--muted)}
+    nav a{color:rgba(255,255,255,0.95);text-decoration:none;margin-left:18px;font-weight:600}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center;padding:24px 0}
+    .hero-copy h2{font-family:'Playfair Display',serif;font-size:44px;margin:0 0 12px;opacity:0;transform:translateY(12px);transition:all .6s ease}
+    .hero-copy p{color:rgba(255,255,255,0.9);margin:0 0 18px;opacity:0;transform:translateY(12px);transition:all .6s ease .12s}
+    .cta{display:flex;gap:12px}
+    .btn{background:transparent;border:2px solid rgba(255,255,255,0.18);padding:12px 18px;border-radius:10px;font-weight:600;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.06));backdrop-filter:blur(6px)}
+
+    .hero-preview{background:var(--glass);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:all .6s ease .2s}
+    .hero-preview .badge{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+    .hero-preview .large{font-family:'Playfair Display',serif;font-size:20px}
+
+    /* products */
+    #products{margin-top:28px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:14px;padding:14px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.04);opacity:0;transform:translateY(10px);transition:all .45s cubic-bezier(.2,.9,.3,1)}
+    .card img{width:100%;height:260px;object-fit:cover;border-radius:10px}
+    .meta{padding-top:12px}
+    .meta .title{font-family:'Playfair Display',serif;font-size:16px;margin:0}
+    .meta .price{font-weight:600;color:var(--muted);margin-top:6px}
+    .card .actions{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    .qty{display:flex;align-items:center;gap:8px}
+    .add{background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));border:none;padding:8px 12px;border-radius:8px;color:white;cursor:pointer}
+
+    /* cart button */
+    .cart-btn{position:fixed;right:22px;bottom:20px;background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));border:none;padding:14px 18px;border-radius:14px;color:white;font-weight:700;box-shadow:var(--shadow);cursor:pointer;z-index:60}
+
+    /* cart modal */
+    .cart-modal{position:fixed;right:20px;bottom:80px;width:360px;max-width:calc(100% - 40px);background:rgba(255,255,255,0.03);backdrop-filter:blur(8px);border-radius:14px;padding:12px;box-shadow:var(--shadow);z-index:70;display:none}
+    .cart-modal.open{display:block}
+    .cart-modal h4{margin:0 0 10px;font-family:'Playfair Display'}
+    .cart-items{max-height:300px;overflow:auto}
+    .cart-item{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px}
+    .cart-item img{width:64px;height:64px;object-fit:cover;border-radius:8px}
+    .cart-item .meta{font-size:13px}
+    .cart-total{display:flex;justify-content:space-between;align-items:center;padding-top:10px;font-weight:700}
+    .checkout{width:100%;margin-top:10px;padding:10px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--gradient-start),var(--gradient-end));color:white;font-weight:700;cursor:pointer}
+
+    /* about */
+    #about{margin-top:40px;background:rgba(255,255,255,0.02);padding:24px;border-radius:12px}
+    #about h3{font-family:'Playfair Display',serif;margin:0 0 8px}
+    #about p{margin:0;color:var(--muted)}
+
+    footer{margin-top:30px;padding-top:20px;display:flex;justify-content:space-between;align-items:center}
+    .social{display:flex;gap:12px}
+    .social a{width:40px;height:40px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);text-decoration:none}
+
+    @media (max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-preview{order:2}.cart-modal{right:16px;width:340px}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}header{flex-direction:column;align-items:flex-start;gap:10px}nav{display:flex;gap:10px;flex-wrap:wrap}.hero-copy h2{font-size:32px}.cart-modal{right:8px;left:8px;bottom:80px;width:auto}}
+    .card:hover{transform:translateY(-6px);transition:all 220ms ease}.add:hover{opacity:0.95}
+
+    /* simple fade-in utility */
+    .in-view{opacity:1;transform:none}
+
+    /* subtle animations */
+    .fade-slide{opacity:0;transform:translateY(8px);transition:all .5s ease}
+    .fade-slide.in-view{opacity:1;transform:none}
+
+    /* modal overlay for checkout */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:80}
+    .overlay.open{display:flex}
+    .modal{background:white;color:#0b1220;border-radius:12px;padding:20px;max-width:480px;width:92%}
+    .modal h3{margin-top:0}
+    .modal .btn-close{background:none;border:none;font-weight:700;position:absolute;right:12px;top:12px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-wrap"><img src="Untitled_design-removebg-preview.png" alt="Nuha Fashion House logo"></div>
+        <div><h1>Nuha Fashion House</h1><p>Luxury Modest Wear</p></div>
+      </div>
+      <nav><a href="#products">Shop</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <h2 class="fade-slide">Discover elegance redefined in every stitch</h2>
+          <p class="fade-slide">Nuha Fashion House crafts luxury modest wear that combines sophistication with grace. Every design celebrates individuality through timeless elegance.</p>
+          <div class="cta"><button class="btn primary" id="shopNow">Shop Now</button><a class="btn" href="#about">About Us</a></div>
+        </div>
+        <div class="hero-preview fade-slide"><div class="badge">Exclusive Drop</div><div class="large">Silk Heritage Collection</div><div class="small" style="color:var(--muted);font-size:13px">Free worldwide shipping on orders over $150</div></div>
+      </section>
+
+      <section id="products">
+        <h3 style="font-family:'Playfair Display',serif;margin:0 0 14px">Luxury Collection</h3>
+        <div class="grid">
+          <!-- products: using Unsplash placeholders; replace with your images for production -->
+          <div class="card"><img src="https://source.unsplash.com/500x500/?silk,hijab" alt="Silk Hijab"><div class="meta"><div class="title">Silk Signature Hijab</div><div class="price">79</div><div class="actions"><div class="qty">Size: S/M</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?abaya,luxury" alt="Embroidered Abaya"><div class="meta"><div class="title">Embroidered Abaya</div><div class="price">149</div><div class="actions"><div class="qty">Black</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?dress,maxi" alt="Maxi Dress"><div class="meta"><div class="title">Tailored Maxi Dress</div><div class="price">199</div><div class="actions"><div class="qty">Color: Navy</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?scarf,chiffon" alt="Chiffon Scarf"><div class="meta"><div class="title">Chiffon Layered Scarf</div><div class="price">59</div><div class="actions"><div class="qty">One size</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?tunic,linen" alt="Linen Tunic"><div class="meta"><div class="title">Luxury Linen Tunic</div><div class="price">129</div><div class="actions"><div class="qty">Size: M</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?shawl,silk" alt="Ombre Shawl"><div class="meta"><div class="title">Silk Ombre Shawl</div><div class="price">89</div><div class="actions"><div class="qty">One size</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?kaftan,beaded" alt="Beaded Kaftan"><div class="meta"><div class="title">Beaded Kaftan</div><div class="price">219</div><div class="actions"><div class="qty">Ivory</div><button class="add">Add to cart</button></div></div></div>
+          <div class="card"><img src="https://source.unsplash.com/500x500/?abaya,cotton" alt="Cotton Abaya"><div class="meta"><div class="title">Premium Cotton Abaya</div><div class="price">99</div><div class="actions"><div class="qty">Sizes S–XL</div><button class="add">Add to cart</button></div></div></div>
+        </div>
+      </section>
+
+      <section id="about">
+        <h3>About Nuha Fashion House</h3>
+        <p style="margin-top:8px">Nuha Fashion House is a luxury modest-wear label that embodies timeless design, craftsmanship, and comfort. Our creations merge rich fabrics with refined tailoring to bring luxury to everyday modest wear. Each piece tells a story of elegance, confidence, and sophistication for the modern woman.</p>
+      </section>
+    </main>
+
+    <footer>
+      <div style="font-size:13px;color:var(--muted)">© <span id="year"></span> Nuha Fashion House — All Rights Reserved</div>
+      <div class="social">
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><path d="M17.5 6.5h.01"></path></svg></a>
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><path d="M18 2h-3a4 4 0 0 0-4 4v3H8v4h3v8h4v-8h3l1-4h-4V6a1 1 0 0 1 1-1h3z"></path></svg></a>
+        <a href="#contact" aria-label="Contact"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg"><path d="M21 10a2 2 0 0 0-2-2H7l-4 4v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8z"></path></svg></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- cart button + modal -->
+  <button class="cart-btn" id="openCart">Cart (<span id="cartCount">0</span>)</button>
+  <div class="cart-modal" id="cartModal" role="dialog" aria-label="Shopping cart">
+    <h4>Your cart</h4>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-total">Total: <span id="cartTotal">$0.00</span></div>
+    <button class="checkout" id="checkoutBtn">Proceed to payment (Test)</button>
+  </div>
+
+  <!-- checkout overlay (simulated) -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-label="Checkout modal">
+      <button class="btn-close" id="closeModal">✕</button>
+      <h3>Test Checkout</h3>
+      <p>This is a simulated checkout for testing. To accept real payments, connect Stripe or a payment provider (instructions below).</p>
+      <div style="margin-top:12px">
+        <label style="display:block;margin-bottom:6px">Email</label>
+        <input id="checkoutEmail" type="email" placeholder="you@example.com" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;">
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="checkout" id="confirmPayment">Pay (Simulate)</button>
+        <button class="btn" id="cancelPayment">Cancel</button>
+      </div>
+      <hr style="margin:12px 0">
+      <small style="color:#334155;display:block">Developer note: To enable real payments, create a server endpoint that creates a Stripe Checkout Session and return its id. Then call <code>stripe.redirectToCheckout({ sessionId })</code>. See README instructions included in the packaged download.</small>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ---- Cart logic (with quantities & totals) ----
+    let cart = JSON.parse(localStorage.getItem('nuhaCart') || '[]');
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartModal = document.getElementById('cartModal');
+
+    function formatCurrency(n){return '$' + Number(n).toFixed(2)}
+
+    function renderCart(){
+      cartCount.textContent = cart.reduce((s,i)=>s+i.qty,0);
+      cartItems.innerHTML = '';
+      let total = 0;
+      if(cart.length===0){cartItems.innerHTML = '<div style="padding:12px;color:var(--muted)">Your cart is empty</div>'}
+      cart.forEach((item, idx)=>{
+        total += item.price * item.qty;
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
+          <img src="${item.img}" alt="${item.title}">
+          <div class="meta">
+            <div style="font-weight:700">${item.title}</div>
+            <div style="color:var(--muted);font-size:13px">${formatCurrency(item.price)} · Qty: <strong>${item.qty}</strong></div>
+            <div style="margin-top:6px"><button data-idx="${idx}" class="btn remove">Remove</button></div>
+          </div>
+        `;
+        cartItems.appendChild(el);
+      });
+      cartTotal.textContent = formatCurrency(total);
+      localStorage.setItem('nuhaCart', JSON.stringify(cart));
+      document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+
+      // attach remove handlers
+      document.querySelectorAll('.remove').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const i = Number(btn.dataset.idx);
+          cart.splice(i,1);
+          renderCart();
+        })
+      })
+    }
+    renderCart();
+
+    // Add to cart buttons
+    document.querySelectorAll('.add').forEach((btn, i)=>{
+      btn.addEventListener('click', ()=>{
+        const card = btn.closest('.card');
+        const title = card.querySelector('.title').textContent;
+        const price = Number(card.querySelector('.price').textContent);
+        const img = card.querySelector('img').src;
+        const existing = cart.find(c=>c.title===title);
+        if(existing) existing.qty += 1; else cart.push({title,price,qty:1,img});
+        renderCart();
+        btn.textContent = 'Added'; btn.disabled = true; btn.style.opacity = .8;
+        setTimeout(()=>{btn.textContent='Add to cart';btn.disabled=false;btn.style.opacity=1},900);
+      });
+    });
+
+    // open/close cart
+    document.getElementById('openCart').addEventListener('click', ()=>{
+      cartModal.classList.toggle('open');
+    });
+
+    // Checkout simulated
+    const overlay = document.getElementById('overlay');
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{
+      overlay.classList.add('open');
+    });
+    document.getElementById('closeModal').addEventListener('click', ()=>overlay.classList.remove('open'));
+    document.getElementById('cancelPayment').addEventListener('click', ()=>overlay.classList.remove('open'));
+    document.getElementById('confirmPayment').addEventListener('click', ()=>{
+      // simulate success
+      overlay.classList.remove('open');
+      cart = [];
+      renderCart();
+      alert('Payment simulated. Thank you — this was a test checkout.');
+    });
+
+    // Shop now scroll
+    document.getElementById('shopNow').addEventListener('click', ()=>{
+      document.getElementById('products').scrollIntoView({behavior:'smooth'});
+    });
+
+    // Simple fade-in when elements enter viewport
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+        }
+      });
+    },{threshold:0.12});
+    document.querySelectorAll('.card, .fade-slide, .hero-copy h2, .hero-preview').forEach(el=>io.observe(el));
+
+    // small helper: make cards appear with stagger
+    document.querySelectorAll('.card').forEach((c, idx)=>{setTimeout(()=>c.classList.add('in-view'), 120*idx)});
+
+    // Developer notes / Stripe integration example (server required)
+    /*
+    To integrate Stripe Checkout (real payments):
+    1) Install and configure Stripe on your server (node/python/php). Use your secret key on the server only.
+    2) Create a route /create-checkout-session that calls stripe.checkout.sessions.create({
+         payment_method_types: ['card'],
+         line_items: [{price: 'price_xxx', quantity: 1}],
+         mode: 'payment',
+         success_url: 'https://your-site.com/success',
+         cancel_url: 'https://your-site.com/cancel'
+       })
+    3) Return the session id to the client and call:
+         const stripe = Stripe('pk_test_...');
+         stripe.redirectToCheckout({ sessionId });
+    */
+  </script>
+</body>
+</html>
